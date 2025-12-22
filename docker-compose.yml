@@ -4,4 +4,4 @@ services:
     container_name: rts-br
     volumes:
       - .:/app
-    command: cargo build
+    command: cargo build --target x86_64-pc-windows-gnu
