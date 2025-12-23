@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug (Windows exe)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/target/x86_64-pc-windows-gnu/debug/rts-br.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "preLaunchTask": "Docker Compose Build Bevy"
+    }
+  ]
+}
