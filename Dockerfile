@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libxcursor-dev \
     libxinerama-dev \
     libgl1-mesa-dev \
+    libwayland-dev \
     libvulkan-dev \
 ##  WINDOWS STUFF ##
     cmake \
