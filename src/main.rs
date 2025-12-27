@@ -1,4 +1,7 @@
 use bevy::prelude::*;
+use systems::logic::{LuaVM, Script};
+
+mod systems;
 
 #[derive(Component)]
 struct MainCamera;
@@ -14,10 +17,20 @@ fn main() {
         }))
         .add_systems(Startup, setup)
         .add_systems(FixedUpdate, fixed_update)
+        .add_systems(FixedUpdate, systems::logic::run_fixed_logic)
+        .add_systems(Update, systems::logic::run_logic)
+        .insert_non_send_resource(LuaVM::new())
         .run();
 }
 
-fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>, mut materials: ResMut<Assets<StandardMaterial>>) {
+fn setup(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+) {
+    // test script
+    commands.spawn((Script::new("assets/scripts/camera.lua"),));
+
     // circular base
     commands.spawn((
         Mesh3d(meshes.add(Circle::new(4.0))),
@@ -49,14 +62,16 @@ fn setup(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>, mut materials
     ));
 }
 
-fn fixed_update(mut query: Query<&mut Transform, With<MainCamera>>, keyboard: Res<ButtonInput<KeyCode>>) {
+fn fixed_update(
+    mut query: Query<&mut Transform, With<MainCamera>>,
+    keyboard: Res<ButtonInput<KeyCode>>,
+) {
     let mut transform = query.single_mut().unwrap();
-    
+
     let cam_speed = {
         if keyboard.pressed(KeyCode::ShiftLeft) || keyboard.pressed(KeyCode::ShiftRight) {
             0.3
-        }
-        else {
+        } else {
             0.15
         }
     };
@@ -75,6 +90,5 @@ fn fixed_update(mut query: Query<&mut Transform, With<MainCamera>>, keyboard: Re
 
     if keyboard.pressed(KeyCode::KeyD) {
         transform.translation.x += cam_speed;
-
     }
 }
