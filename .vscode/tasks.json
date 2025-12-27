@@ -2,11 +2,18 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Docker Compose Build Bevy",
+      "label": "Docker Compose Build Windows",
       "type": "shell",
-      "command": "docker compose up",
+      "command": "TARGET=x86_64-pc-windows-gnu docker compose up",
       "problemMatcher": [],
-      "group": "build"
+      "group": "build",
+    },
+    {
+      "label": "Docker Compose Build Linux",
+      "type": "shell",
+      "command": "TARGET=x86_64-unknown-linux-gnu docker compose up",
+      "problemMatcher": [],
+      "group": "build",
     }
   ]
 }

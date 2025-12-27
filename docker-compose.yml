@@ -4,4 +4,6 @@ services:
     container_name: rts-br
     volumes:
       - .:/app
-    command: cargo build --target x86_64-pc-windows-gnu
+    environment:
+      - TARGET=${TARGET}
+    command: sh -c "cargo build --target $TARGET"
