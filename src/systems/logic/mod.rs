@@ -15,14 +15,14 @@ impl LuaVM {
 
 #[derive(Component)]
 pub struct Script {
-    path: String,
+    code: String,
     started: bool,
 }
 
 impl Script {
     pub fn new(path: &str) -> Self {
         Self {
-            path: path.to_string(),
+            code: std::fs::read_to_string(path).expect("Failed to load Lua script"),
             started: false,
         }
     }
@@ -42,14 +42,13 @@ pub fn run_logic(
     let lua = &lua_vm.lua;
 
     for (entity, mut script) in &mut query {
-        let code = std::fs::read_to_string(&script.path).expect("Failed to load Lua script");
 
         // Per-entity environment
         let env = lua.globals();
 
         env.set("self", LuaEntityContext { entity }).unwrap();
 
-        lua.load(&code).exec().unwrap();
+        lua.load(&script.code).exec().unwrap();
 
         if !script.started {
             if let Ok(start) = lua.globals().get::<_, mlua::Function>("Start") {
